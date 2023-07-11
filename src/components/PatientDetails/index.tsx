@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getOnePatient } from '../../services/patients';
-import { Patient, Gender } from '../../types';
+import { Patient, Gender, Diagnosis } from '../../types';
 import { Container, Box, Typography } from '@mui/material';
 import FemaleOutlinedIcon from '@mui/icons-material/FemaleOutlined';
 import MaleOutlinedIcon from '@mui/icons-material/MaleOutlined';
@@ -20,7 +20,7 @@ const DisplayGender = ({ gender }: { gender: Gender }) => {
   }
 };
 
-const PatientDetails = () => {
+const PatientDetails = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
   const id = useParams().id;
   if (!id) {
     throw new Error('Invalid URL');
@@ -86,7 +86,11 @@ const PatientDetails = () => {
                 </Typography>
                 <Typography variant='body2'>
                   {entry.diagnosisCodes &&
-                    entry.diagnosisCodes.map(dc => <li key={dc}>{dc}</li>)}
+                    entry.diagnosisCodes.map(dc => (
+                      <li key={dc}>
+                        {dc} {diagnoses?.find(d => d.code === dc)?.name}
+                      </li>
+                    ))}
                 </Typography>
               </Box>
             ))}
