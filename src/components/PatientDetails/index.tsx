@@ -56,11 +56,40 @@ const PatientDetails = () => {
           </Typography>
           <Box>
             <Typography variant='body1'>ssn: {patient.ssn}</Typography>
-          </Box>
-          <Box>
             <Typography variant='body1'>
               occupation: {patient.occupation}
             </Typography>
+          </Box>
+          <Box>
+            <Typography
+              variant='h6'
+              style={{ marginBottom: '0.5rem', marginTop: '1rem' }}
+            >
+              Entries
+            </Typography>
+            {patient.entries.map(entry => (
+              <Box
+                style={{ marginBottom: '0.5rem', marginTop: '1rem' }}
+                key={entry.id}
+              >
+                <Typography
+                  variant='body2'
+                  style={{ fontWeight: '600' }}
+                >
+                  {entry.date}
+                </Typography>
+                <Typography
+                  variant='body2'
+                  style={{ fontStyle: 'italic' }}
+                >
+                  {entry.description}
+                </Typography>
+                <Typography variant='body2'>
+                  {entry.diagnosisCodes &&
+                    entry.diagnosisCodes.map(dc => <li key={dc}>{dc}</li>)}
+                </Typography>
+              </Box>
+            ))}
           </Box>
         </Box>
       )}
