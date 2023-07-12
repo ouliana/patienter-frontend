@@ -2,16 +2,17 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import { Button, Divider, Container, Typography } from '@mui/material';
 
-import { Patient, Diagnosis } from './types';
+import { Patient } from './types';
 
 import { getAllPatients } from './services/patients';
 import PatientListPage from './components/PatientListPage';
 import PatientDetails from './components/PatientDetails';
+import { useDiagnosesDispatch, DiagnosesActionKind } from './DiagnosesContext';
 import { getAllDiagnoses } from './services/diagnoses';
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const diagnosesDispatch = useDiagnosesDispatch();
 
   useEffect(() => {
     const fetchPatientList = async () => {
@@ -23,14 +24,17 @@ const App = () => {
 
   useEffect(() => {
     const fetchDiagnosisList = async () => {
-      const fetchedDiagnosis = await getAllDiagnoses();
-      setDiagnoses(fetchedDiagnosis);
+      const data = await getAllDiagnoses();
+      diagnosesDispatch({
+        type: DiagnosesActionKind.SET,
+        payload: data,
+      });
     };
     void fetchDiagnosisList();
-  }, []);
+  }, [diagnosesDispatch]);
 
   return (
-    <div className='App'>
+    <>
       <Router>
         <Container>
           <Typography
@@ -60,12 +64,12 @@ const App = () => {
             />
             <Route
               path='/patients/:id'
-              element={<PatientDetails diagnoses={diagnoses} />}
+              element={<PatientDetails />}
             />
           </Routes>
         </Container>
       </Router>
-    </div>
+    </>
   );
 };
 

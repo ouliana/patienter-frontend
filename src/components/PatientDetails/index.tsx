@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getOnePatient } from '../../services/patients';
-import { Patient, Gender, Diagnosis } from '../../types';
+import { Patient, Gender } from '../../types';
 import { Container, Box, Typography } from '@mui/material';
 import FemaleOutlinedIcon from '@mui/icons-material/FemaleOutlined';
 import MaleOutlinedIcon from '@mui/icons-material/MaleOutlined';
 import TransgenderOutlinedIcon from '@mui/icons-material/TransgenderOutlined';
+import EntryCard from './EntryCard';
 
 const DisplayGender = ({ gender }: { gender: Gender }) => {
   switch (gender) {
@@ -20,7 +21,7 @@ const DisplayGender = ({ gender }: { gender: Gender }) => {
   }
 };
 
-const PatientDetails = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
+const PatientDetails = () => {
   const id = useParams().id;
   if (!id) {
     throw new Error('Invalid URL');
@@ -68,31 +69,10 @@ const PatientDetails = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
               Entries
             </Typography>
             {patient.entries.map(entry => (
-              <Box
-                style={{ marginBottom: '0.5rem', marginTop: '1rem' }}
+              <EntryCard
+                entry={entry}
                 key={entry.id}
-              >
-                <Typography
-                  variant='body2'
-                  style={{ fontWeight: '600' }}
-                >
-                  {entry.date}
-                </Typography>
-                <Typography
-                  variant='body2'
-                  style={{ fontStyle: 'italic' }}
-                >
-                  {entry.description}
-                </Typography>
-                <Typography variant='body2'>
-                  {entry.diagnosisCodes &&
-                    entry.diagnosisCodes.map(dc => (
-                      <li key={dc}>
-                        {dc} {diagnoses?.find(d => d.code === dc)?.name}
-                      </li>
-                    ))}
-                </Typography>
-              </Box>
+              />
             ))}
           </Box>
         </Box>
