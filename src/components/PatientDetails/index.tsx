@@ -68,12 +68,21 @@ const PatientDetails = () => {
             >
               Entries
             </Typography>
-            {patient.entries.map(entry => (
-              <EntryCard
-                entry={entry}
-                key={entry.id}
-              />
-            ))}
+            {patient.entries.length ? (
+              patient.entries.map(entry => (
+                <EntryCard
+                  entry={entry}
+                  key={entry.id}
+                />
+              ))
+            ) : (
+              <Typography
+                variant='body1'
+                style={{ marginTop: '1rem' }}
+              >
+                No entries
+              </Typography>
+            )}
           </Box>
         </Box>
       )}
