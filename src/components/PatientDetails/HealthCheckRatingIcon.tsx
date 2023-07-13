@@ -9,8 +9,7 @@ const HealthCheckRatingIcon = ({ rating }: { rating: HealthCheckRating }) => {
         <FavoriteIcon
           sx={{
             color: green[500],
-            fontSize: 'inherit',
-            verticalAlign: 'text-top',
+            marginTop: '1rem',
           }}
         />
       );
@@ -19,8 +18,7 @@ const HealthCheckRatingIcon = ({ rating }: { rating: HealthCheckRating }) => {
         <FavoriteIcon
           sx={{
             color: amber[500],
-            fontSize: 'inherit',
-            verticalAlign: 'text-top',
+            marginTop: '1rem',
           }}
         />
       );
@@ -29,8 +27,7 @@ const HealthCheckRatingIcon = ({ rating }: { rating: HealthCheckRating }) => {
         <FavoriteIcon
           sx={{
             color: deepOrange[500],
-            fontSize: 'inherit',
-            verticalAlign: 'text-top',
+            marginTop: '1rem',
           }}
         />
       );
@@ -39,8 +36,7 @@ const HealthCheckRatingIcon = ({ rating }: { rating: HealthCheckRating }) => {
         <FavoriteIcon
           sx={{
             color: pink[500],
-            fontSize: 'inherit',
-            verticalAlign: 'text-top',
+            marginTop: '1rem',
           }}
         />
       );

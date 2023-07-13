@@ -1,5 +1,4 @@
 import { Entry } from '../../types';
-import { Box } from '@mui/material';
 import HealthCheckRatingIcon from './HealthCheckRatingIcon';
 
 const HealthCheck: React.FC<{ entry: Entry }> = ({
@@ -11,11 +10,7 @@ const HealthCheck: React.FC<{ entry: Entry }> = ({
     throw new Error('Invalid data');
   }
 
-  return (
-    <Box>
-      <HealthCheckRatingIcon rating={entry.healthCheckRating} />
-    </Box>
-  );
+  return <HealthCheckRatingIcon rating={entry.healthCheckRating} />;
 };
 
 export default HealthCheck;

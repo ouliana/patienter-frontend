@@ -10,7 +10,7 @@ const EntryCard = ({ entry }: { entry: Entry }) => {
     <Box sx={{ minWidth: 275, my: '1rem' }}>
       <Card variant='outlined'>
         <CardContent
-          // style={{ marginBottom: '0.5rem', marginTop: '1rem' }}
+          // style={{ marginBottom: '0', marginTop: '0' }}
           key={entry.id}
         >
           <EntryHeader entry={entry} />

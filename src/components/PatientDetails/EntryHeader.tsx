@@ -11,27 +11,29 @@ const EntryHeader = ({ entry }: { entry: Entry }) => {
         <Stack
           direction='row'
           alignItems='center'
+          spacing={1}
         >
           <Typography
             variant='body2'
             style={{ fontWeight: '600' }}
           >
             {entry.date}
-            <MedicalServicesIcon
-              sx={{
-                fontSize: 'inherit',
-                verticalAlign: 'text-top',
-                color: '#1976d2',
-                marginLeft: '0.5rem',
-              }}
-            />
           </Typography>
+
+          <MedicalServicesIcon
+            sx={{
+              verticalAlign: 'text-top',
+              color: '#1976d2',
+              marginLeft: '0.5rem',
+            }}
+          />
         </Stack>
       );
     case 'OccupationalHealthcare':
       return (
         <Stack
           direction='row'
+          spacing={1}
           alignItems='center'
         >
           <Typography
@@ -39,17 +41,15 @@ const EntryHeader = ({ entry }: { entry: Entry }) => {
             style={{ fontWeight: '600' }}
           >
             {entry.date}
-            <WorkIcon
-              sx={{
-                fontSize: 'inherit',
-                verticalAlign: 'text-top',
-                color: '#1976d2',
-                display: 'inline-block',
-                marginLeft: '0.5rem',
-                marginRight: '0.5rem',
-              }}
-            />
           </Typography>
+          <WorkIcon
+            sx={{
+              verticalAlign: 'text-center',
+              color: '#1976d2',
+              display: 'inline-block',
+            }}
+          />
+
           <Typography
             variant='body2'
             style={{
@@ -66,23 +66,21 @@ const EntryHeader = ({ entry }: { entry: Entry }) => {
         <Stack
           direction='row'
           alignItems='center'
+          spacing={1}
         >
           <Typography
             variant='body2'
             style={{ fontWeight: '600' }}
           >
             {entry.date}
-            <LocalHospitalIcon
-              sx={{
-                fontSize: 'inherit',
-                verticalAlign: 'text-top',
-                color: '#1976d2',
-                display: 'inline-block',
-                marginLeft: '0.5rem',
-                marginRight: '0.5rem',
-              }}
-            />
           </Typography>
+          <LocalHospitalIcon
+            sx={{
+              verticalAlign: 'text-top',
+              color: '#1976d2',
+              display: 'inline-block',
+            }}
+          />
         </Stack>
       );
     default:
