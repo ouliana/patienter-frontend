@@ -1,7 +1,7 @@
 import { Box, Card, CardContent } from '@mui/material';
 import { Entry } from '../../types';
 
-import EntryDetails from './EntryDetails';
+import EntrySpecifics from './EntrySpecifics';
 import EntryHeader from './EntryHeader';
 import EntryCommonInfo from './EntryCommonInfo';
 
@@ -15,7 +15,7 @@ const EntryCard = ({ entry }: { entry: Entry }) => {
         >
           <EntryHeader entry={entry} />
           <EntryCommonInfo entry={entry} />
-          <EntryDetails entry={entry} />
+          <EntrySpecifics entry={entry} />
         </CardContent>
       </Card>
     </Box>

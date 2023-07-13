@@ -3,7 +3,7 @@ import HealthCheck from './HealthCheck';
 import Hospital from './Hospital';
 import OccupationalHealthcare from './OccupationalHealthcare';
 
-const EntryDetails = ({ entry }: { entry: Entry }) => {
+const EntrySpecifics = ({ entry }: { entry: Entry }) => {
   switch (entry.type) {
     case 'HealthCheck':
       return <HealthCheck entry={entry} />;
@@ -16,4 +16,4 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
   }
 };
 
-export default EntryDetails;
+export default EntrySpecifics;
