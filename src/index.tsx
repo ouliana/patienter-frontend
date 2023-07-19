@@ -1,9 +1,12 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { DiagnosesContextProvider } from './DiagnosesContext';
+import { DiagnosesContextProvider } from './context/DiagnosesContext';
+import { MessageContextProvider } from './context/MessageContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <DiagnosesContextProvider>
-    <App />
-  </DiagnosesContextProvider>
+  <MessageContextProvider>
+    <DiagnosesContextProvider>
+      <App />
+    </DiagnosesContextProvider>
+  </MessageContextProvider>
 );

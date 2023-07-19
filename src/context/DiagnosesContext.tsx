@@ -1,5 +1,5 @@
 import { createContext, useReducer, useContext } from 'react';
-import { Diagnosis } from './types';
+import { Diagnosis } from '../types';
 
 export enum DiagnosesActionKind {
   SET = 'SET',

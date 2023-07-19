@@ -17,9 +17,13 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3
 }
 
-interface DateRange {
+export interface SickLeave {
   startDate: string;
   endDate: string;
+}
+export interface Discharge {
+  date: string,
+  criteria: string
 }
 
 interface BaseEntry {
@@ -30,23 +34,20 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+export interface HealthCheckEntry extends BaseEntry {
+  type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: DateRange;
+  sickLeave?: SickLeave;
 }
 
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  discharge: {
-    date: string,
-    criteria: string
-  }
+  discharge: Discharge;
 }
 
 export type Entry =
@@ -64,4 +65,17 @@ export interface Patient {
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
+
+export type updateEntryFunction = (entry: Entry) => void;
+
+export enum Severity {
+  Error = 'error',
+  Warning = 'warning',
+  Info = 'info',
+  Success = 'succsess'
+}
+export interface Message {
+  content: string;
+  severity?: Severity;
+}
 

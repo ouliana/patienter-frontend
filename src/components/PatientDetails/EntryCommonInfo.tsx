@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Entry } from '../../types';
-import { useDiagnosesValue } from '../../DiagnosesContext';
+import { useDiagnosesValue } from '../../context/DiagnosesContext';
 
 const EntryCommonInfo = ({ entry }: { entry: Entry }) => {
   const { diagnoses } = useDiagnosesValue();

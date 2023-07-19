@@ -7,7 +7,10 @@ import { Patient } from './types';
 import { getAllPatients } from './services/patients';
 import PatientListPage from './components/PatientListPage';
 import PatientDetails from './components/PatientDetails';
-import { useDiagnosesDispatch, DiagnosesActionKind } from './DiagnosesContext';
+import {
+  useDiagnosesDispatch,
+  DiagnosesActionKind,
+} from './context/DiagnosesContext';
 import { getAllDiagnoses } from './services/diagnoses';
 
 const App = () => {

@@ -1,12 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { getOnePatient } from '../../services/patients';
-import { Patient, Gender } from '../../types';
+import { Patient, Gender, Entry, Severity } from '../../types';
 import { Container, Box, Typography } from '@mui/material';
 import FemaleOutlinedIcon from '@mui/icons-material/FemaleOutlined';
 import MaleOutlinedIcon from '@mui/icons-material/MaleOutlined';
 import TransgenderOutlinedIcon from '@mui/icons-material/TransgenderOutlined';
 import EntryCard from './EntryCard';
+import NewEntryForm from './NewEntryForm';
+import MessageBox from '../MessageBox';
+import MessageContext, {
+  MessageActionKind,
+  useMessageDispatch,
+} from '../../context/MessageContext';
 
 const DisplayGender = ({ gender }: { gender: Gender }) => {
   switch (gender) {
@@ -28,6 +34,29 @@ const PatientDetails = () => {
   }
 
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const dispatchMesssage = useMessageDispatch();
+
+  const updateEntries = (newEntry: Entry): void => {
+    setEntries(entries.concat(newEntry));
+
+    //Display success message
+    dispatchMesssage({
+      type: MessageActionKind.Set,
+      payload: {
+        content: 'New entry added',
+        severity: Severity.Success,
+      },
+    });
+    setTimeout(
+      () =>
+        dispatchMesssage({
+          type: MessageActionKind.Clear,
+          payload: { content: '' },
+        }),
+      5000
+    );
+  };
 
   useEffect(() => {
     (async function () {
@@ -39,10 +68,30 @@ const PatientDetails = () => {
         if (e instanceof Error) {
           errorMessage += ' Error: ' + e.message;
         }
-        console.log(errorMessage);
+
+        //Display error message
+        dispatchMesssage({
+          type: MessageActionKind.Set,
+          payload: { content: errorMessage, severity: Severity.Error },
+        });
+        setTimeout(
+          () =>
+            dispatchMesssage({
+              type: MessageActionKind.Clear,
+              payload: { content: '' },
+            }),
+          5000
+        );
       }
     })();
   }, [id]);
+
+  useEffect(() => {
+    if (patient) {
+      console.log('patient.entries', patient.entries);
+      setEntries(patient.entries);
+    }
+  }, [patient]);
 
   return (
     <Container sx={{ my: '2rem' }}>
@@ -61,6 +110,16 @@ const PatientDetails = () => {
               occupation: {patient.occupation}
             </Typography>
           </Box>
+
+          <Box>
+            <Typography variant='body1'>ssn: {patient.ssn}</Typography>
+            <MessageBox />
+            <NewEntryForm
+              patientId={patient.id}
+              update={updateEntries}
+            />
+          </Box>
+
           <Box>
             <Typography
               variant='h6'
@@ -68,8 +127,9 @@ const PatientDetails = () => {
             >
               Entries
             </Typography>
-            {patient.entries.length ? (
-              patient.entries.map(entry => (
+
+            {entries.length ? (
+              entries.map(entry => (
                 <EntryCard
                   entry={entry}
                   key={entry.id}
