@@ -39,9 +39,7 @@ const NewEntryForm = ({
   const [description, setDescription] = useState<string>('');
   const [specialist, setSpecialist] = useState<string>('');
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
-  const [healthCheckRating, setHealthCheckRating] = useState<string>(
-    ratingStrings[0]
-  );
+  const [healthCheckRating, setHealthCheckRating] = useState<string>('');
   const [entryType, setEntryType] = useState('HealthCheck');
   const [employerName, setEmployerName] = useState<string>('');
   const [sickLeaveStart, setSickLeaveStart] = useState<string>('');
@@ -80,7 +78,7 @@ const NewEntryForm = ({
     setDescription('');
     setSpecialist('');
     setDiagnosisCodes([]);
-    setHealthCheckRating(ratingStrings[0]);
+    setHealthCheckRating('');
     setEmployerName('');
     setSickLeaveStart('');
     setSickLeaveEnd('');
