@@ -198,13 +198,8 @@ const NewEntryForm = ({
           onChange={({ target }) => setSpecialist(target.value)}
         />
 
-        <FormControl>
-          <InputLabel
-            id='diagnosis-codes-label'
-            sx={{ marginLeft: '-0.9rem', marginTop: '0.5rem' }}
-          >
-            Diagnosis codes
-          </InputLabel>
+        <FormControl variant='standard'>
+          <InputLabel id='diagnosis-codes-label'>Diagnosis codes</InputLabel>
           <Select
             labelId='diagnosis-codes-label'
             id='diagnosis-codes'
@@ -218,7 +213,6 @@ const NewEntryForm = ({
               <MenuItem
                 key={diagnosis.code}
                 value={diagnosis.code}
-                //  style={getStyles(name, personName, theme)}
               >
                 {diagnosis.code}
               </MenuItem>
@@ -237,12 +231,12 @@ const NewEntryForm = ({
                 value={healthCheckRating}
                 onChange={handleHealthCheckRating}
                 label='Healthcheck rating'
+                MenuProps={MenuProps}
               >
                 {ratingStrings.map(value => (
                   <MenuItem
                     key={value}
                     value={value}
-                    //  style={getStyles(name, personName, theme)}
                   >
                     {value}
                   </MenuItem>
