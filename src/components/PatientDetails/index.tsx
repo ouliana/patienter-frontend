@@ -1,15 +1,15 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getOnePatient } from '../../services/patients';
 import { Patient, Gender, Entry, Severity } from '../../types';
-import { Container, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import FemaleOutlinedIcon from '@mui/icons-material/FemaleOutlined';
 import MaleOutlinedIcon from '@mui/icons-material/MaleOutlined';
 import TransgenderOutlinedIcon from '@mui/icons-material/TransgenderOutlined';
 import EntryCard from './EntryCard';
 import NewEntryForm from './NewEntryForm';
 import MessageBox from '../MessageBox';
-import MessageContext, {
+import {
   MessageActionKind,
   useMessageDispatch,
 } from '../../context/MessageContext';
@@ -88,13 +88,12 @@ const PatientDetails = () => {
 
   useEffect(() => {
     if (patient) {
-      console.log('patient.entries', patient.entries);
       setEntries(patient.entries);
     }
   }, [patient]);
 
   return (
-    <Container sx={{ my: '2rem' }}>
+    <Box sx={{ my: '2rem' }}>
       {patient && (
         <Box>
           <Typography
@@ -119,7 +118,6 @@ const PatientDetails = () => {
               update={updateEntries}
             />
           </Box>
-
           <Box sx={{ marginTop: '4rem' }}>
             <Typography
               variant='h6'
@@ -145,7 +143,7 @@ const PatientDetails = () => {
           </Box>
         </Box>
       )}
-    </Container>
+    </Box>
   );
 };
 

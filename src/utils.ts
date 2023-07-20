@@ -60,7 +60,7 @@ export const toEntry = (obj: unknown): Entry => {
             return obj as Entry
           }
           throw new Error('missing employerName property');
-        case 'HospitalEntry':
+        case 'Hospital':
           if ('discharge' in obj && isDischarge(obj.discharge)) return obj as Entry
           throw new Error('missing discharge property');
         default:

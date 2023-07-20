@@ -38,11 +38,11 @@ export const createPatient = async (object: PatientFormValues) => {
   return data;
 };
 
-export const createNewEntry = async (patientId: string, entry: Entry): Promise<Entry> => {
+export const createNewEntry = async (patientId: string, entry: Entry): Promise<Entry[]> => {
   try {
     console.log(`${baseURL}/${patientId}/entries`);
-    const { data } = await axios.post<Entry>(`${baseURL}/${patientId}/entries`, entry);
-    return data;
+    const { data } = await axios.post<Patient>(`${baseURL}/${patientId}/entries`, entry);
+    return data.entries;
   } catch (error: unknown) {
     let errorMessage = 'Failed to create an entry.';
     if (error instanceof AxiosError) {

@@ -7,7 +7,6 @@ import {
   Input,
   InputLabel,
   MenuItem,
-  OutlinedInput,
   Radio,
   RadioGroup,
   Select,
@@ -17,8 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Diagnosis, Severity, updateEntryFunction } from '../../types';
-import { toEntry } from '../../utils';
+import { HealthCheckRating, Severity, updateEntryFunction } from '../../types';
 import { createNewEntry } from '../../services/patients';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -26,6 +24,7 @@ import {
   useMessageDispatch,
 } from '../../context/MessageContext';
 import { useDiagnosesValue } from '../../context/DiagnosesContext';
+import { toEntry } from '../../utils';
 
 const NewEntryForm = ({
   patientId,
@@ -34,15 +33,21 @@ const NewEntryForm = ({
   patientId: string;
   update: updateEntryFunction;
 }) => {
-  const [description, setDescription] = useState<string>('');
+  const ratingStrings = Object.keys(HealthCheckRating).slice(4);
+
   const [date, setDate] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [specialist, setSpecialist] = useState<string>('');
-  const [healthCheckRating, setHealthCheckRating] = useState<number>(1);
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
+  const [healthCheckRating, setHealthCheckRating] = useState<string>(
+    ratingStrings[0]
+  );
   const [entryType, setEntryType] = useState('HealthCheck');
   const [employerName, setEmployerName] = useState<string>('');
   const [sickLeaveStart, setSickLeaveStart] = useState<string>('');
   const [sickLeaveEnd, setSickLeaveEnd] = useState<string>('');
+  const [dischargeDate, setDischargeDate] = useState<string>('');
+  const [dischargeCriteria, setDischargeCriteria] = useState<string>('');
 
   const dispatchMesssage = useMessageDispatch();
   const diagnoses = useDiagnosesValue().diagnoses;
@@ -57,6 +62,7 @@ const NewEntryForm = ({
       },
     },
   };
+
   const handleCodeChange = (
     event: SelectChangeEvent<typeof diagnosisCodes>
   ) => {
@@ -69,12 +75,21 @@ const NewEntryForm = ({
     );
   };
 
-  const handleCancel = () => {
-    setDescription('');
+  const clearForm = () => {
     setDate('');
+    setDescription('');
     setSpecialist('');
-    setHealthCheckRating(1);
     setDiagnosisCodes([]);
+    setHealthCheckRating(ratingStrings[0]);
+    setEmployerName('');
+    setSickLeaveStart('');
+    setSickLeaveEnd('');
+    setDischargeDate('');
+    setDischargeCriteria('');
+  };
+
+  const handleCancel = () => {
+    clearForm();
   };
 
   const handleEntryTypeChange = (
@@ -83,20 +98,34 @@ const NewEntryForm = ({
     setEntryType((event.target as HTMLInputElement).value);
   };
 
+  const handleHealthCheckRating = (event: SelectChangeEvent) => {
+    setHealthCheckRating(event.target.value);
+  };
+
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const newEntry = toEntry({
       id: uuidv4(),
-      type: 'HealthCheck',
-      description,
       date,
+      description,
       specialist,
-      healthCheckRating,
       diagnosisCodes,
+      type: entryType,
+      healthCheckRating: ratingStrings.indexOf(healthCheckRating),
+      employerName,
+      sickLeave: {
+        startDate: sickLeaveStart,
+        endDate: sickLeaveEnd,
+      },
+      discharge: {
+        date: dischargeDate,
+        criteria: dischargeCriteria,
+      },
     });
     try {
-      const res = await createNewEntry(patientId, newEntry);
-      update(res);
+      await createNewEntry(patientId, newEntry);
+      update(newEntry);
+      clearForm();
     } catch (error: unknown) {
       let errorMessage = 'Something bad happened.';
       if (error instanceof Error) {
@@ -197,15 +226,30 @@ const NewEntryForm = ({
           </Select>
         </FormControl>
         {entryType === 'HealthCheck' && (
-          <TextField
-            id='health-check'
-            label='Healthcheck rating'
-            variant='standard'
-            value={healthCheckRating}
-            onChange={({ target }) =>
-              setHealthCheckRating(Number(target.value))
-            }
-          />
+          <>
+            <FormControl variant='standard'>
+              <InputLabel id='health-check-label'>
+                Healthcheck rating
+              </InputLabel>
+              <Select
+                labelId='health-check-label'
+                id='health-check'
+                value={healthCheckRating}
+                onChange={handleHealthCheckRating}
+                label='Healthcheck rating'
+              >
+                {ratingStrings.map(value => (
+                  <MenuItem
+                    key={value}
+                    value={value}
+                    //  style={getStyles(name, personName, theme)}
+                  >
+                    {value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </>
         )}
         {entryType === 'OccupationalHealthcare' && (
           <>
@@ -247,6 +291,42 @@ const NewEntryForm = ({
             </Box>
           </>
         )}
+
+        {entryType === 'Hospital' && (
+          <>
+            <Box sx={{ marginTop: '1rem' }}>
+              <Typography variant='body1'>Discharge</Typography>
+              <Box sx={{ marginLeft: '1rem' }}>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  spacing={4}
+                >
+                  <Stack>
+                    <Typography variant='body1'>Date:</Typography>
+                    <Input
+                      id='dischargeDate'
+                      type='date'
+                      value={dischargeDate}
+                      onChange={({ target }) => setDischargeDate(target.value)}
+                    />
+                  </Stack>
+                  <Stack sx={{ width: '100%' }}>
+                    <Typography variant='body1'>Criteria:</Typography>
+                    <Input
+                      id='dischargeCriteria'
+                      value={dischargeCriteria}
+                      onChange={({ target }) =>
+                        setDischargeCriteria(target.value)
+                      }
+                    />
+                  </Stack>
+                </Stack>
+              </Box>
+            </Box>
+          </>
+        )}
+
         <Stack
           direction='row'
           justifyContent='space-between'
