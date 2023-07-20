@@ -120,14 +120,13 @@ const PatientDetails = () => {
             />
           </Box>
 
-          <Box>
+          <Box sx={{ marginTop: '4rem' }}>
             <Typography
               variant='h6'
               style={{ marginBottom: '0.5rem', marginTop: '1rem' }}
             >
               Entries
             </Typography>
-
             {entries.length ? (
               entries.map(entry => (
                 <EntryCard

@@ -1,15 +1,23 @@
 import {
+  Box,
   Button,
   FormControl,
   FormControlLabel,
   FormGroup,
+  Input,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
   Radio,
   RadioGroup,
+  Select,
+  SelectChangeEvent,
   Stack,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Severity, updateEntryFunction } from '../../types';
+import { Diagnosis, Severity, updateEntryFunction } from '../../types';
 import { toEntry } from '../../utils';
 import { createNewEntry } from '../../services/patients';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,6 +25,7 @@ import {
   MessageActionKind,
   useMessageDispatch,
 } from '../../context/MessageContext';
+import { useDiagnosesValue } from '../../context/DiagnosesContext';
 
 const NewEntryForm = ({
   patientId,
@@ -31,8 +40,34 @@ const NewEntryForm = ({
   const [healthCheckRating, setHealthCheckRating] = useState<number>(1);
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
   const [entryType, setEntryType] = useState('HealthCheck');
+  const [employerName, setEmployerName] = useState<string>('');
+  const [sickLeaveStart, setSickLeaveStart] = useState<string>('');
+  const [sickLeaveEnd, setSickLeaveEnd] = useState<string>('');
 
   const dispatchMesssage = useMessageDispatch();
+  const diagnoses = useDiagnosesValue().diagnoses;
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  const handleCodeChange = (
+    event: SelectChangeEvent<typeof diagnosisCodes>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setDiagnosisCodes(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value
+    );
+  };
 
   const handleCancel = () => {
     setDescription('');
@@ -82,9 +117,10 @@ const NewEntryForm = ({
       );
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
-      <FormGroup>
+      <FormGroup sx={{ marginTop: '2rem' }}>
         <FormControl>
           <RadioGroup
             row
@@ -111,6 +147,12 @@ const NewEntryForm = ({
             />
           </RadioGroup>
         </FormControl>
+        <Input
+          id='date'
+          value={date}
+          type='date'
+          onChange={({ target }) => setDate(target.value)}
+        />
         <TextField
           id='description'
           label='Description'
@@ -118,13 +160,7 @@ const NewEntryForm = ({
           value={description}
           onChange={({ target }) => setDescription(target.value)}
         />
-        <TextField
-          id='date'
-          label='Date'
-          variant='standard'
-          value={date}
-          onChange={({ target }) => setDate(target.value)}
-        />
+
         <TextField
           id='specialist'
           label='Specialist'
@@ -133,13 +169,33 @@ const NewEntryForm = ({
           onChange={({ target }) => setSpecialist(target.value)}
         />
 
-        <TextField
-          id='diagnosis-codes'
-          label='Diagnosis codes'
-          variant='standard'
-          value={diagnosisCodes}
-          onChange={({ target }) => setDiagnosisCodes(target.value.split(','))}
-        />
+        <FormControl>
+          <InputLabel
+            id='diagnosis-codes-label'
+            sx={{ marginLeft: '-0.9rem', marginTop: '0.5rem' }}
+          >
+            Diagnosis codes
+          </InputLabel>
+          <Select
+            labelId='diagnosis-codes-label'
+            id='diagnosis-codes'
+            multiple
+            value={diagnosisCodes}
+            onChange={handleCodeChange}
+            input={<Input />}
+            MenuProps={MenuProps}
+          >
+            {diagnoses.map(diagnosis => (
+              <MenuItem
+                key={diagnosis.code}
+                value={diagnosis.code}
+                //  style={getStyles(name, personName, theme)}
+              >
+                {diagnosis.code}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         {entryType === 'HealthCheck' && (
           <TextField
             id='health-check'
@@ -150,6 +206,46 @@ const NewEntryForm = ({
               setHealthCheckRating(Number(target.value))
             }
           />
+        )}
+        {entryType === 'OccupationalHealthcare' && (
+          <>
+            <TextField
+              id='employerName'
+              label='Employer name'
+              variant='standard'
+              value={employerName}
+              onChange={({ target }) => setEmployerName(target.value)}
+            />
+            <Box sx={{ marginTop: '1rem' }}>
+              <Typography variant='body1'>Sick leave</Typography>
+              <Box sx={{ marginLeft: '1rem' }}>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  spacing={4}
+                >
+                  <Stack>
+                    <Typography variant='body1'>Start date:</Typography>
+                    <Input
+                      id='sickLeaveStart'
+                      type='date'
+                      value={sickLeaveStart}
+                      onChange={({ target }) => setSickLeaveStart(target.value)}
+                    />
+                  </Stack>
+                  <Stack>
+                    <Typography variant='body1'>End date:</Typography>
+                    <Input
+                      id='sickLeaveStart'
+                      type='date'
+                      value={sickLeaveEnd}
+                      onChange={({ target }) => setSickLeaveEnd(target.value)}
+                    />
+                  </Stack>
+                </Stack>
+              </Box>
+            </Box>
+          </>
         )}
         <Stack
           direction='row'

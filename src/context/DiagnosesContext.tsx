@@ -41,7 +41,11 @@ export const useDiagnosesDispatch = () => {
   return diagnosesAndDispatch.dispatch;
 };
 
-export const DiagnosesContextProvider = ({ children }: { children: any }) => {
+export const DiagnosesContextProvider = ({
+  children,
+}: {
+  children: JSX.Element;
+}) => {
   const [state, dispatch] = useReducer(reducer, { diagnoses: [] });
 
   return (
